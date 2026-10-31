@@ -3,7 +3,9 @@ from django.db import models
 
 User = get_user_model()
 
-MAX_LENGTH = 256
+TITLE_MAX_LENGTH = 256
+LOCATION_NAME_MAX_LENGTH = 256
+STR_DISPLAY_LENGTH = 30
 
 
 class PublishedModel(models.Model):
@@ -21,7 +23,7 @@ class PublishedModel(models.Model):
 
 
 class Category(PublishedModel):
-    title = models.CharField('Заголовок', max_length=MAX_LENGTH)
+    title = models.CharField('Заголовок', max_length=TITLE_MAX_LENGTH)
     description = models.TextField('Описание')
     slug = models.SlugField(
         'Идентификатор',
@@ -37,22 +39,24 @@ class Category(PublishedModel):
         verbose_name_plural = 'Категории'
 
     def __str__(self):
-        return self.title
+        return self.title[:STR_DISPLAY_LENGTH]
 
 
 class Location(PublishedModel):
-    name = models.CharField('Название места', max_length=MAX_LENGTH)
+    name = models.CharField(
+        'Название места', max_length=LOCATION_NAME_MAX_LENGTH
+    )
 
     class Meta:
         verbose_name = 'местоположение'
         verbose_name_plural = 'Местоположения'
 
     def __str__(self):
-        return self.name
+        return self.name[:STR_DISPLAY_LENGTH]
 
 
 class Post(PublishedModel):
-    title = models.CharField('Заголовок', max_length=MAX_LENGTH)
+    title = models.CharField('Заголовок', max_length=TITLE_MAX_LENGTH)
     text = models.TextField('Текст')
     pub_date = models.DateTimeField(
         'Дата и время публикации',
@@ -87,4 +91,4 @@ class Post(PublishedModel):
         default_related_name = 'posts'
 
     def __str__(self):
-        return self.title
+        return self.title[:STR_DISPLAY_LENGTH]
